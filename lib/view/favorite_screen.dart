@@ -1,12 +1,11 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../controller/controller.dart';
 
 class FavoriteScreen extends StatefulWidget {
-   FavoriteScreen({Key? key}) : super(key: key);
+  const FavoriteScreen({Key? key}) : super(key: key);
 
   @override
   State<FavoriteScreen> createState() => _FavoriteScreenState();
@@ -19,12 +18,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   final MusicController controller = Get.find<MusicController>();
   AssetsAudioPlayer audioPlayer = AssetsAudioPlayer();
 
-
   @override
   void initState() {
     super.initState();
     setupPlayList();
-
   }
 
   @override
@@ -33,11 +30,15 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     setupPlayList();
     super.dispose();
   }
+
   void setupPlayList() async {
-    await audioPlayer.open(Playlist(audios: controller.favList.map((e)
-    => e.audioData).toList() ),
-        showNotification: true, autoStart: false,loopMode: LoopMode.playlist);
+    await audioPlayer.open(
+        Playlist(audios: controller.favList.map((e) => e.audioData).toList()),
+        showNotification: true,
+        autoStart: false,
+        loopMode: LoopMode.playlist);
   }
+
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -45,102 +46,133 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title:Text('Music App'),
+          title: const Text('Music App'),
           backgroundColor: Colors.orange,
           elevation: 0.0,
         ),
         backgroundColor: Colors.orange,
-        body:controller.favList.isEmpty ? Center(child: Text('Empty'),): audioPlayer.builderRealtimePlayingInfos(
-            builder: (context, realtimePlayingInfos) {
-              return Column(
-                children: [
-                  Expanded(child: playlist(realtimePlayingInfos) ),
-                  bottomPlayContainer(realtimePlayingInfos),
-                ],
-              );
-            }),
+        body: controller.favList.isEmpty
+            ? const Center(
+                child: Text('Empty'),
+              )
+            : audioPlayer.builderRealtimePlayingInfos(
+                builder: (context, realtimePlayingInfos) {
+                return Column(
+                  children: [
+                    Expanded(child: playlist(realtimePlayingInfos)),
+                    bottomPlayContainer(realtimePlayingInfos),
+                  ],
+                );
+              }),
       ),
     );
   }
 
   Widget buildFavItems() {
-    return Padding(padding: EdgeInsets.all(10));
+    return const Padding(padding: EdgeInsets.all(10));
   }
 
-  Widget bottomPlayContainer(RealtimePlayingInfos realtimePlayingInfos)
-  {
+  Widget bottomPlayContainer(RealtimePlayingInfos realtimePlayingInfos) {
     return Container(
       height: screenHeight * 0.14,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.grey,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight:Radius.circular(20.0),)),
-      child: Padding(padding: const EdgeInsets.only(left: 10.0,),
+            topLeft: Radius.circular(
+              20.0,
+            ),
+            topRight: Radius.circular(
+              20.0,
+            ),
+          )),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 10.0,
+        ),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: screenHeight * 0.03,
-              child:  Row(
+              child: Row(
                 children: [
-                  SizedBox(width: screenWidth * 0.07,),
+                  SizedBox(
+                    width: screenWidth * 0.07,
+                  ),
                   getTimeText(realtimePlayingInfos.currentPosition),
-                  SizedBox(width: screenWidth * 0.05,),
-                  slider(realtimePlayingInfos.currentPosition,realtimePlayingInfos.duration),
-                  SizedBox(width: screenWidth * 0.05,),
+                  SizedBox(
+                    width: screenWidth * 0.05,
+                  ),
+                  slider(
+                    realtimePlayingInfos.currentPosition,
+                    realtimePlayingInfos.duration,
+                  ),
+                  SizedBox(
+                    width: screenWidth * 0.05,
+                  ),
                   getTimeText(realtimePlayingInfos.duration),
-                  SizedBox(width: screenWidth * 0.1,),
+                  SizedBox(
+                    width: screenWidth * 0.1,
+                  ),
                 ],
               ),
             ),
             Row(
               children: [
-                SizedBox(width: screenWidth * 0.03,),
-                Expanded(child:
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // to get the music title
-                    Text(realtimePlayingInfos.current!.audio.audio.metas.title.toString(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                          color: Colors.indigo
+                SizedBox(
+                  width: screenWidth * 0.03,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // to get the music title
+                      Text(
+                        realtimePlayingInfos.current!.audio.audio.metas.title
+                            .toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                            color: Colors.indigo),
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.005,),
-
-                  ],
+                      SizedBox(
+                        height: screenHeight * 0.005,
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(
+                  width: screenWidth * 0.03,
                 ),
-                SizedBox(width: screenWidth * 0.03,),
                 IconButton(
-                  icon: Icon(Icons.skip_previous_rounded),
+                  icon: const Icon(Icons.skip_previous_rounded),
                   iconSize: screenHeight * 0.07,
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   color: Colors.indigo,
-                  onPressed: () =>audioPlayer.previous(),
+                  onPressed: () => audioPlayer.previous(),
                 ),
                 IconButton(
-                  icon: Icon(realtimePlayingInfos.isPlaying ?
-                  Icons.pause_circle_filled_rounded : Icons.play_circle_fill_rounded),
+                  icon: Icon(realtimePlayingInfos.isPlaying
+                      ? Icons.pause_circle_filled_rounded
+                      : Icons.play_circle_fill_rounded),
                   iconSize: screenHeight * 0.07,
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  color:Colors.indigo,
+                  color: Colors.indigo,
                   onPressed: () => audioPlayer.playOrPause(),
                 ),
                 IconButton(
-                  icon: Icon(Icons.skip_next_rounded),
+                  icon: const Icon(Icons.skip_next_rounded),
                   iconSize: screenHeight * 0.07,
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   color: Colors.indigo,
-                  onPressed: () =>audioPlayer.next(),
+                  onPressed: () => audioPlayer.next(),
                 ),
-                SizedBox(width: screenWidth * 0.1,),
+                SizedBox(
+                  width: screenWidth * 0.1,
+                ),
               ],
             ),
           ],
@@ -157,20 +189,21 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       height: screenHeight * 0.35,
       alignment: Alignment.bottomLeft,
       child: ListView.builder(
-        itemBuilder: (context,index) {
+        itemBuilder: (context, index) {
           return playlistItem(index);
-        }, shrinkWrap: true,
-        itemCount:  controller.favList.length ,
+        },
+        shrinkWrap: true,
+        itemCount: controller.favList.length,
       ),
     );
   }
 
   Widget playlistItem(int index) {
     return InkWell(
-      onTap: () =>   audioPlayer.playlistPlayAtIndex(index) ,
+      onTap: () => audioPlayer.playlistPlayAtIndex(index),
       splashColor: Colors.transparent,
       highlightColor: Colors.yellow,
-      child: Container(
+      child: SizedBox(
         height: screenHeight * 0.1,
         child: Padding(
           padding: const EdgeInsets.only(
@@ -180,8 +213,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           child: Row(
             children: [
               Text(
-                '${index+1}',
-                style: TextStyle(
+                '${index + 1}',
+                style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
@@ -191,30 +224,29 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               ),
               Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        controller.favList[index].audioData.metas.title.toString(),
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.005,
-                      ),
-                    ],
-                  )),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.favList[index].audioData.metas.title.toString(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.005,
+                  ),
+                ],
+              )),
               IconButton(
-                onPressed: ()
-                {
-
+                onPressed: () {
                   // controller.manageFavourites(index);
-
                 },
-                icon:  Icon(Icons.favorite ,)  ,
+                icon: const Icon(
+                  Icons.favorite,
+                ),
               ),
             ],
           ),
@@ -232,7 +264,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         SliderTheme(
             data: SliderThemeData(
                 thumbColor: Colors.white,
-                activeTrackColor: Color(0xff10d541),
+                activeTrackColor: const Color(0xff10d541),
                 inactiveTrackColor: Colors.grey[800],
                 overlayColor: Colors.transparent),
             child: Slider.adaptive(
@@ -241,7 +273,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 min: -3,
                 onChanged: (value) {
                   if (value <= 0) {
-                    audioPlayer.seek(Duration(seconds: 0));
+                    audioPlayer.seek(const Duration(seconds: 0));
                   } else {
                     audioPlayer.seek(Duration(seconds: value.toInt()));
                   }
@@ -253,7 +285,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   Widget getTimeText(Duration seconds) {
     return Text(
       transformString(seconds.inSeconds),
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
       ),
     );
@@ -267,4 +299,3 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     return '$minuteString:$secondString'; // Returns a string with the format mm:ss
   }
 }
- 
